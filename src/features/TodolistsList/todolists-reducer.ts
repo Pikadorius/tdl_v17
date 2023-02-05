@@ -1,7 +1,7 @@
 import {todolistsAPI, TodolistType} from '../../api/todolists-api'
 import {Dispatch} from 'redux'
 import {RequestStatusType, setAppStatusAC} from '../../app/app-reducer'
-import {handleServerNetworkError} from '../../utils/error-utils'
+import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 const initialState: Array<TodolistDomainType> = []
@@ -33,7 +33,7 @@ const todolistsSlice = createSlice({
             state[changeIndex].entityStatus = action.payload.entityStatus
         },
         setTodolistsAC: (state, action: PayloadAction<{ todolists: TodolistType[] }>) => {
-           return  action.payload.todolists.map(t=>({...t, filter: 'all', entityStatus: 'idle'}))
+            return action.payload.todolists.map(t => ({...t, filter: 'all', entityStatus: 'idle'}))
         }
     }
 })
@@ -123,11 +123,18 @@ export const addTodolistTC = (title: string) => {
         dispatch(setAppStatusAC({status: 'loading'}))
         todolistsAPI.createTodolist(title)
             .then((res) => {
-                dispatch(addTodolistAC({todolist: res.data.data.item}))
-                dispatch(setAppStatusAC({status: 'succeeded'}))
-            })
+                if (res.data.resultCode === 0) {
+                    dispatch(addTodolistAC({todolist: res.data.data.item}))
+                    dispatch(setAppStatusAC({status: 'succeeded'}))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
+            }).catch(e => {
+            handleServerNetworkError(e, dispatch)
+        })
     }
 }
+
 export const changeTodolistTitleTC = (id: string, title: string) => {
     return (dispatch: Dispatch<ActionsType>) => {
         todolistsAPI.updateTodolist(id, title)
