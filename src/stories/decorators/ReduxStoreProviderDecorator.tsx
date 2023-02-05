@@ -6,8 +6,8 @@ import {todolistsReducer} from '../../features/TodolistsList/todolists-reducer'
 import {v1} from 'uuid'
 import {AppRootStateType} from '../../app/store'
 import {TaskPriorities, TaskStatuses} from '../../api/todolists-api'
-import {appReducer} from '../../app/app-reducer'
 import thunkMiddleware from 'redux-thunk'
+import appReducer from '../../app/app-reducer';
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
