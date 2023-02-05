@@ -33,7 +33,7 @@ const todolistsSlice = createSlice({
             state[changeIndex].entityStatus = action.payload.entityStatus
         },
         setTodolistsAC: (state, action: PayloadAction<{ todolists: TodolistType[] }>) => {
-            return action.payload.todolists.map(t=>({...t, filter: 'all', entityStatus: 'idle'}))
+           return  action.payload.todolists.map(t=>({...t, filter: 'all', entityStatus: 'idle'}))
         }
     }
 })
