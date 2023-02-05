@@ -2,11 +2,25 @@ import {Dispatch} from 'redux'
 import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer'
 import {authAPI, LoginParamsType} from '../../api/todolists-api'
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 const initialState: InitialStateType = {
     isLoggedIn: false
 }
 
+const authSlice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {
+        setLoggedInAC: (state, action: PayloadAction<boolean>) => {
+            state.isLoggedIn = action.payload
+        }
+    }
+})
+
+export default authSlice.reducer
+
+/*
 export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
         case 'login/SET-IS-LOGGED-IN':
@@ -15,11 +29,13 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
             return state
     }
 }
+*/
 
 // actions
-
+/*
 export const setIsLoggedInAC = (value: boolean) =>
     ({type: 'login/SET-IS-LOGGED-IN', value} as const)
+*/
 
 
 // thunks
